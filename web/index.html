@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Diffie-Hellman Key Exchange</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="/eel.js"></script>
+</head>
+
+<body>
+    <div class="tray flex flex-col gap-2 test">
+        <div class="card flex flex-col gap-2">
+            <h1 class="font-bold font-xl">Diffie-Hellman Key Exchange Simulator</h1>
+            <ul>
+                <li>Fadhil Rasendriya Prabowo - 1906285554</li>
+                <li>Muhammad Krishertanto Adityaputro - 1906302485</li>
+                <li>Muhammad Kenta Bisma Dewa Brata - 1906350950</li>
+            </ul>
+        </div>
+        <div class="card grid grid-cols-2">
+            <span>Prime</span>
+            <span class="prime font-mono"></span>
+            <span>α</span>
+            <span class="alpha font-mono"></span>
+        </div>
+        <div class="card grid grid-cols-1 gap-2">
+            <input class="p-2" type="text" placeholder="Alice's private key" id="aR">
+            <input class="p-2" type="text" placeholder="Bob's private key" id="bR">
+            <button class="p-2 bg-blue-600 active:bg-blue-800 text-white" onclick="submit()">Calculate</button>
+        </div>
+        <div class="card grid grid-cols-2 gap-2">
+            <span>Alice's Private Key</span>
+            <span>Bob's Private Key</span>
+            <span class="font-mono" id="AR"></span>
+            <span class="font-mono" id="BR"></span>
+            <span>Alice's Public Key</span>
+            <span>Bob's Public Key</span>
+            <span class="font-mono" id="AU"></span>
+            <span class="font-mono" id="BU"></span>
+            <span>Alice's Shared Key</span>
+            <span>Bob's Shared Key</span>
+            <span class="font-mono" id="AS"></span>
+            <span class="font-mono" id="BS"></span>
+        </div>
+    </div>
+    <script>
+        (function() {
+            eel.data()().then((res) => {
+                $(".prime").html(res[0])
+                $(".alpha").html(res[1])
+            })
+        })();
+
+        function submit() {
+            aR = $("#aR").val()
+            bR = $("#bR").val()
+
+            eel.calc(aR, bR)().then((res) => {
+                console.log(res)
+                $("#AR").html(aR)
+                $("#BR").html(bR)
+                $("#AU").html(res["alice_public_key"])
+                $("#BU").html(res["bob_public_key"])
+                $("#AS").html(res["alice_shared_session_key"])
+                $("#BS").html(res["bob_shared_session_key"])
+            })
+        }
+    </script>
+</body>
+
+</html>
