@@ -7,23 +7,26 @@ sys.stderr = logfile
 import eel
 import random
 import sympy
+import logging
+
 
 num_digits = 20
 
 lower_bound = 10**(num_digits-1)
 upper_bound = 10**num_digits - 1
 
-def search_prime():
-    n = random.randint(lower_bound, upper_bound)
-    p = sympy.nextprime(n)
-    return p
+with open('primes.data', 'r') as prime_file:
+    line_number = random.randrange(1, 130)
+    i = 0
+    for line in prime_file.readlines():
+        i += 1
+        if i == line_number:
+            parsed = line.strip().split()
+            p = int(parsed[0])
+            break
 
-p = 0
-a = None
-
-while len(str(p)) != num_digits and a == None:
-    p = search_prime()
-    a = sympy.primitive_root(p)
+logging.info(f"chosen prime: {p}")
+a = sympy.primitive_root(p)
 
 eel.init('web', allowed_extensions=['.js', '.html', '.css'])
 
@@ -33,7 +36,7 @@ def greet(name):
 
 @eel.expose
 def data():
-    return p, a
+    return str(p), str(a)
 
 @eel.expose
 def calc(a_r, b_r):
@@ -51,10 +54,10 @@ def calc(a_r, b_r):
         assert alice_shared_session_key == bob_shared_session_key
 
         return {
-            'alice_public_key': alice_public_key,
-            'bob_public_key': bob_public_key,
-            'alice_shared_session_key' : alice_shared_session_key,
-            'bob_shared_session_key' : bob_shared_session_key
+            'alice_public_key': str(alice_public_key),
+            'bob_public_key': str(bob_public_key),
+            'alice_shared_session_key' : str(alice_shared_session_key),
+            'bob_shared_session_key' : str(bob_shared_session_key)
         }
     except:
         return {
